@@ -9,15 +9,23 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.0",
+    "@mui/material": "^5.15.11",
+    "@mui/x-data-grid": "^6.19.5",
+    "@supabase/auth-helpers-nextjs": "^0.9.0",
+    "@supabase/supabase-js": "^2.39.7",
+    "next": "14.1.1",
     "react": "^18",
-    "react-dom": "^18",
-    "next": "14.1.1"
+    "react-dom": "^18"
   },
   "devDependencies": {
+    "@types/node": "20.11.24",
     "autoprefixer": "^10.0.1",
-    "postcss": "^8",
-    "tailwindcss": "^3.3.0",
+    "encoding": "^0.1.13",
     "eslint": "^8",
-    "eslint-config-next": "14.1.1"
+    "eslint-config-next": "14.1.1",
+    "postcss": "^8",
+    "tailwindcss": "^3.3.0"
   }
 }
