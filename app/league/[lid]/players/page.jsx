@@ -1,57 +1,41 @@
-"use client"
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
+import { cookies } from "next/headers"
+import AddButton from "./AddButton"
+import Players from './PlayerStats'
 
-import * as React from 'react';
-// import PlayerStats from "./PlayerStats";
-import { Suspense } from 'react';
-import Loading from "../../../(home)/loading";
-import { DataGrid } from '@mui/x-data-grid';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+export default async function FreeAgency({ params }) {
+  const supabase = createServerComponentClient({ cookies })
+  var { data: { user } } = await supabase.auth.getUser()  //might want to change other getSessions -> getUser it's more secure on the server side
+  const email = user.email
+  const lid = 'lid' + params.lid
 
-/* const style = {
-  height: 300,
-  width: "50%",
-  //color: 'green',
-  //bgcolor: 'red',
-}; 
+  var { data } = await supabase.from('Teams').select('name, duelist, controller').eq('lid', params.lid).eq('email', email)
+  const roster = data
+  //console.log(roster)
 
-export default function Players() {
-    return (
-      <main>
-        <h2>Player Statistics</h2>
-        <Suspense fallback={<Loading />}>
-          <PlayerStats />
-        </Suspense>
-      </main>
-    );
-} */
-
-const columns = [
-  {field: 'name', headerName: 'Name', width: 150 },
-  {field: 'team', headerName: 'Team', width: 150 },
-  {field: 'region', headerName: 'Region', width: 150},
-];
-
-export default function Players(){
-  const supabase = createClientComponentClient()
-  const [rows, SetRows] = React.useState([])
-
-  React.useEffect(() => {
-    const fetcher = async () => {
-      const { data } = await supabase.from('Players').select()
-      SetRows(data)
-    }
-    fetcher();
-  })
-
+  var { data, error } = await supabase.from('Rostered').select(`pid, ${lid}, Players ( name, team, region, position )`).eq(`${lid}`, -1).order('Players (name)', { ascending: true })
+  //var { data, error } = await supabase.from('Players').select(`name, team, region, position, Rostered ( ${lid} )`).eq(`Rostered (${lid})`, -1)//.order('name', { ascending: true })
+  //console.log(data)
+  
   return (
     <div>
-      <Suspense fallback={<Loading />}>
-        <DataGrid 
-          getRowId={(row) => row.pid}
-          rows={rows}
-          columns={columns}
-        />
-      </Suspense>
+      <select name="add" id="add-player-select">
+        <option key={0} value="">--Choose a player you want to add--</option>
+        {data.map((player) => (
+          <option key={player.pid} value={`${player.Players.name}`}>{`${player.Players.name}`}</option>
+        ))}
+      </select>
+      <select name="drop" id="drop-player-select">
+        <option value="">--Choose a player you want to drop--</option>
+        <option value={roster[0].duelist}>{roster[0].duelist}</option>
+        <option value={roster[0].controller}>{roster[0].controller}</option>
+      </select>
+      <div>
+        <AddButton email={email} lid={lid} roster={roster}/>
+      </div>
+      <div>
+        <Players />
+      </div>
     </div>
   )
 }

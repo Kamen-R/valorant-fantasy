@@ -3,6 +3,8 @@ import Link from "next/link";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import LogoutButton from "../../components/LogoutButton";
+import Image from "next/image"
+import Logo from '../../components/VFtemplogo.png'
 
 async function getTeamID(lid, uid) {
   const supabase = createServerComponentClient({ cookies })
@@ -28,6 +30,15 @@ export default async function LeagueLayout({ children, params }) {
   return (
     <>
       <nav>
+        <a href="/">
+          <Image
+            src={Logo}
+            alt='VF Logo'
+            width={70}
+            quality={100}
+            placeholder="blur"
+          />
+        </a>
         <h1>Valorant Fantasy</h1>
         <Link href={`/league/${lid}/team/${tid[0].tid}`}>My Team</Link>
         <Link href={`/league/${lid}/matchup/1`}>Matchup</Link>

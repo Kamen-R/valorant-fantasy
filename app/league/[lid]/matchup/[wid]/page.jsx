@@ -3,6 +3,7 @@ import Loading from "../../../../(home)/loading";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import DisplayMatchup from "./DisplayMatchup";
+import Link from 'next/link';
 
 async function getMatches(lid, wid) {
     const supabase = createServerComponentClient({ cookies })
@@ -21,10 +22,13 @@ export default async function Matchup({ params }) {
 
   const match_list = await getMatches(lid, wid)
 
-  var renderedOutput = match_list.map(item => DisplayMatchup(item))
+  var renderedOutput = match_list.map(item => DisplayMatchup(item, wid))
 
     return (
         <>
+          <div>
+            <Link href={`/league/${lid}/matchup/2`}>Week 2</Link>
+          </div>
           <Suspense fallback={<Loading />}>
             {renderedOutput}
           </Suspense>

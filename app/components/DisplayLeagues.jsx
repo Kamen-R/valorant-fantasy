@@ -30,10 +30,10 @@ export default async function DisplayLeagues() {
   }
   for (let i = 0; i < leagues[0].leagues.length; i++) {
     var name = await getLeagueName(leagues[0].leagues[i])
-    leagueNames.push(name)
+    leagueNames.push({league: name, id: leagues[0].leagues[i]})
   }
     
-  var renderedOutput = leagueNames.map(item => <div key={item} className="card my-5"> <h3>{item}</h3> </div>)
+  var renderedOutput = leagueNames.map(item => <a key={item.league} href={`/league/${item.id}`}><div className="card my-5"> <h3>{item.league}</h3> </div></a>)
 
   return (
     <>

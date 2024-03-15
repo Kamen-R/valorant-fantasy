@@ -7,6 +7,7 @@ import LogoutButton from './LogoutButton'
 export default function Navbar({ user }) {
   return (
     <nav>
+      <a href="/">
         <Image
             src={Logo}
             alt='VF Logo'
@@ -14,11 +15,11 @@ export default function Navbar({ user }) {
             quality={100}
             placeholder="blur"
         />
-        <h1>Valorant Fantasy</h1>
-        <Link href="/">Home</Link>
-        <Link href="/kickoff" className="mr-auto">Kickoff Statistics</Link>
-        {user && <span>Hello, {user.email}</span>}
-        <LogoutButton />
+      </a>
+      <h1>Valorant Fantasy</h1>
+      <Link href="/kickoff" className="mr-auto">Kickoff Statistics</Link>
+      {user && <span>Hello, {user.email}</span>}
+      <LogoutButton />
     </nav>
   )
 }

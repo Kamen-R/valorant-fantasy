@@ -7,7 +7,6 @@ export default function Home() {
       <p>Welcome to Valorant Fantasy!</p>
       <h2>My Leagues</h2>
       <DisplayLeagues />
-      <button className="btn-primary">Create League</button>
     </main>
   )
 }
