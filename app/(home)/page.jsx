@@ -7,6 +7,11 @@ export default function Home() {
       <p>Welcome to Valorant Fantasy!</p>
       <h2>My Leagues</h2>
       <DisplayLeagues />
+      <div>
+        <h2>Information/Announcements</h2>
+        <p>Currently, this website is still in beta and if you experience any problems please reach out.</p>
+        <p>I'm hoping to make many more improvements potentially even as the season goes on.</p>
+      </div>
     </main>
   )
 }

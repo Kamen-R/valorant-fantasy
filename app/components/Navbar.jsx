@@ -17,7 +17,8 @@ export default function Navbar({ user }) {
         />
       </a>
       <h1>Valorant Fantasy</h1>
-      <Link href="/kickoff" className="mr-auto">Kickoff Statistics</Link>
+      <Link href="/kickoff">Kickoff Player Stats</Link>
+      <Link href="/kickoff-teams" className="mr-auto">Kickoff Team Stats</Link>
       {user && <span>Hello, {user.email}</span>}
       <LogoutButton />
     </nav>

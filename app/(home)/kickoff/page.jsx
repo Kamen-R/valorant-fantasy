@@ -41,10 +41,16 @@ import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 //   )
 // }
 const columns = [
-  {field: 'name', headerName: 'Name', width: 150 },
-  {field: 'fpts', headerName: 'FPTS', width: 150 },
-  {field: 'team', headerName: 'Team', width: 150 },
+  {field: 'name', headerName: 'Name', width: 150},
+  {field: 'team', headerName: 'Team', width: 150},
+  {field: 'position', headerName: 'Pos', width: 150},
   {field: 'region', headerName: 'Region', width: 150},
+  {field: 'kills', headerName: 'Kills', width: 100},
+  {field: 'deaths', headerName: 'Deaths', width: 100},
+  {field: 'assists', headerName: 'Assists', width: 100},
+  {field: 'ACS', headerName: 'ACS', width: 100},
+  {field: 'fpts', headerName: 'Fantasy Points', width: 150},
+  {field: 'gp', headerName: 'Games Played', width: 150}
 ];
 
 export default function Kickoff(){
@@ -53,7 +59,7 @@ export default function Kickoff(){
 
   React.useEffect(() => {
     const fetcher = async () => {
-      const { data } = await supabase.from('Kickoff Statistics').select()
+      const { data } = await supabase.from('Kickoff Statistics').select().neq('position', 'team')
       SetRows(data)
     }
     fetcher();
@@ -63,8 +69,14 @@ export default function Kickoff(){
     <div>
       <Suspense fallback={<Loading />}>
         <DataGrid 
+          getRowId={(row) => row.pid}
           rows={rows}
           columns={columns}
+          initialState={{
+            ...rows.initialState,
+            pagination: { paginationModel: { pageSize: 25} },
+          }}
+          pageSizeOptions={[25, 50, 100]}
         />
       </Suspense>
     </div>
