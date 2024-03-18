@@ -10,7 +10,6 @@ export default function Home() {
       <div>
         <h2>Information/Announcements</h2>
         <p>Currently, this website is still in beta and if you experience any problems please reach out.</p>
-        <p>I'm hoping to make many more improvements potentially even as the season goes on.</p>
       </div>
     </main>
   )
