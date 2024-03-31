@@ -84,7 +84,25 @@ form button {
 }  
 
 /* card styles */
+/* .card {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+    padding: 48px;
+    gap: 32px;
+    isolation: isolate;
+    width: 404px;
+    height: 161px;
+    @apply
+      bg-white
+      shadow-sm
+      rounded-md
+      relative
+      overflow-hidden;
+} */
 .card {
+    width: 400px;
     @apply 
       bg-white 
       shadow-sm 
@@ -93,33 +111,105 @@ form button {
       relative 
       overflow-hidden;
 }
+/* .card h3 {
+    position: absolute;
+    width: 140px;
+    height: 50px;
+    left: 19px;
+    top: 10px;
+    @apply
+      font-bold text-gray-700 text-sm;
+} */
 .card h3 {
     @apply 
-      font-bold text-gray-700 text-sm 
+      font-bold text-gray-700
       mb-0;
+}
+.pos {
+    @apply
+      text-sm
+}
+.fpts {
+    position: absolute;
+    left: 250px;
+    font-size: 24px;
+    top: 25px;
 }
 .card p {
     @apply my-4 text-sm leading-6;
 }
-  
-/* pill styles */
-.pill {
-    @apply 
-      py-1 px-2 mt-3
-      inline-block 
-      text-xs font-semibold;
+
+/* select styles */
+select {
+    border: 1px solid #caced1;
+    border-radius: 0.25rem;
+    color: #000;
+    cursor: pointer;
+    margin-top: 10px;
+    margin-bottom: 5px;
 }
-.pill.high {
-    @apply bg-red-300 text-red-600;
+
+/* container */
+#flex-container {
+    display: flex;
+    flex-direction: row;
+    width: 900px;
+    margin: auto;
+    border: solid;
+    justify-content: space-between;
 }
-.pill.medium {
-    @apply bg-blue-300 text-blue-600;
+#team-left {
+    width: 370px;
+    border: solid;
+    border-right: 0;
+    padding-bottom: 30px;
 }
-.pill.low {
-    @apply bg-emerald-300 text-emerald-600;
+#middle-matchup {
+    width: 160px;
+    border: solid;
+    text-align: center;
+    border-right: 0;
+    border-left: 0;
 }
-.card .pill {
-    @apply 
-      absolute bottom-0 right-0 
-      rounded-tl-md;
+#team-right {
+    width: 370px;
+    border: solid;
+    border-left: 0;
+    padding-bottom: 30px;
+}
+#team-name-left {
+    text-align: center;
+}
+#team-name-right {
+    text-align: center;
+}
+#score-left {
+    display: inline;
+}
+#score-right {
+    display: inline;
+}
+.team-1 {
+    text-align: right;
+    padding-right: 10px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+.team-2 {
+    text-align: left;
+    padding-left: 10px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+.middle-info {
+    text-align: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+.rectangle {
+    width: 30px;
+    height: 10px;
+    border: 1px solid red;
+    fill: red;
+    display: inline;
 }

@@ -3,7 +3,7 @@
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 import { useRouter } from "next/navigation"
 
-function getPositionNyName(roster, name) {
+function getPositionByName(roster, name) {
     for (let prop in roster) {
         if (roster[prop] === name) {
             return prop;
@@ -21,8 +21,8 @@ export default function AddButton({ email, lid, roster }) {
         const tid = data[0].tid
         const player_add = document.getElementById("add-player-select").value
         const player_drop = document.getElementById("drop-player-select").value
-        var pid_add = -1
-        var pid_drop = -1
+        var pid_add = 0
+        var pid_drop = 0
         console.log(player_add, player_drop, tid)
         
         var { data } = await supabase.from('Players').select('pid, name').or(`name.eq.${player_add},name.eq.${player_drop}`)
@@ -34,13 +34,31 @@ export default function AddButton({ email, lid, roster }) {
             pid_drop = data[0].pid
         }
 
-        const position = getPositionNyName(roster[0], player_drop)
+        const position = getPositionByName(roster[0], player_drop)
 
         //console.log(pid_add, pid_drop, position)
 
         var { error } = await supabase.from('Rostered').update({ [lid]: tid}).eq('pid', pid_add)
         var { error } = await supabase.from('Rostered').update({ [lid]: -1}).eq('pid', pid_drop)
         var { error } = await supabase.from('Teams').update({ [position] : player_add}).eq('email', email)
+
+        var { data } = await supabase.from('Leagues').select('current_week').eq('lid', lid.slice(-1))
+        var current_week = data[0].current_week
+        console.log(current_week)
+        var { data } = await supabase.from('Matchups').select().eq('lid', lid.slice(-1)).gte('week', current_week).or(`tid1.eq.${tid},tid2.eq.${tid}`)
+        console.log(data)
+
+        for (const matchup of data) {
+            var mid = matchup.mid
+            if (matchup.tid1 == tid) {
+                var team_num = "team1_"
+            } else {
+                var team_num = "team2_"
+            }
+            var { error } = await supabase.from('Matchups').update({[team_num+position]: player_add}).eq('mid', mid)
+        }
+
+        var { error } = await supabase.from('Transactions').insert({type: 'add', add: pid_add, drop: pid_drop, lid: lid.slice(-1), tid: tid, player_add: player_add, player_drop: player_drop})
 
         router.push(`/league/${lid.slice(-1)}/team/${tid}`)
     }

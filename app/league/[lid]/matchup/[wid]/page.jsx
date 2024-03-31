@@ -1,5 +1,5 @@
-import { Suspense } from 'react';
-import Loading from "../../../../(home)/loading";
+//import { Suspense } from 'react';
+//import Loading from "../../../../(home)/loading";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import DisplayMatchup from "./DisplayMatchup";
@@ -22,16 +22,16 @@ export default async function Matchup({ params }) {
 
   const match_list = await getMatches(lid, wid)
 
-  var renderedOutput = match_list.map(item => DisplayMatchup(item, wid))
+  var renderedOutput = match_list.map(item => DisplayMatchup(item, wid, lid))
 
     return (
-        <>
-          <div>
-            <Link href={`/league/${lid}/matchup/2`}>Week 2</Link>
-          </div>
-          <Suspense fallback={<Loading />}>
-            {renderedOutput}
-          </Suspense>
-        </>
+      <>
+        <div>
+          <Link href={`/league/${lid}/matchup/2`}>Week 2</Link>
+        </div>
+        {renderedOutput}
+      </>
     );
 }
+
+//<Suspense fallback={<Loading />}>

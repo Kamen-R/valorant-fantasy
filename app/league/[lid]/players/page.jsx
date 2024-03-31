@@ -9,7 +9,7 @@ export default async function FreeAgency({ params }) {
   const email = user.email
   const lid = 'lid' + params.lid
 
-  var { data } = await supabase.from('Teams').select('name, duelist, controller').eq('lid', params.lid).eq('email', email)
+  var { data } = await supabase.from('Teams').select('name, player1, player2').eq('lid', params.lid).eq('email', email)
   const roster = data
   //console.log(roster)
 
@@ -27,8 +27,8 @@ export default async function FreeAgency({ params }) {
       </select>
       <select name="drop" id="drop-player-select">
         <option value="">--Choose a player you want to drop--</option>
-        <option value={roster[0].duelist}>{roster[0].duelist}</option>
-        <option value={roster[0].controller}>{roster[0].controller}</option>
+        <option value={roster[0].player1}>{roster[0].player1}</option>
+        <option value={roster[0].player2}>{roster[0].player2}</option>
       </select>
       <div>
         <AddButton email={email} lid={lid} roster={roster}/>
