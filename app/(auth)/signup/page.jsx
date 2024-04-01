@@ -17,7 +17,7 @@ export default function Signup() {
       email,
       password,
       options: {
-        emailRedirectTo: 'http://valorant-fantasy.vercel.app/api/auth/callback'
+        emailRedirectTo: `${location.origin}/api/auth/callback`
       }
     })
 
