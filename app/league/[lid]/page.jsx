@@ -1,5 +1,6 @@
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
 import { cookies } from "next/headers"
+import Link from "next/link"
 
 export default async function LeagueHome({ params }) {
     const lid = params.lid
@@ -22,16 +23,21 @@ export default async function LeagueHome({ params }) {
             var team2_record = division_2[i].wins + "-" + division_2[i].losses
 
             table_data.push({team1_name: division_1[i].team_name, team2_name: division_2[i].team_name, team1_wins: team1_record,
-                team2_wins: team2_record, team1_points: division_1[i].total_points, team2_points: division_2[i].total_points})
+                team2_wins: team2_record, team1_points: division_1[i].total_points, team2_points: division_2[i].total_points,
+                team1_tid: division_1[i].tid, team2_tid: division_2[i].tid})
         }
         //console.log(table_data)
 
         var renderedTable = table_data.map(item => 
             <tr key={`${item.team1_name}-${item.team2_name}`}>
-              <td className="tg-0lax" key={`${item.team1_name}`}>{item.team1_name}</td>
+              <td className="tg-0lax" key={`${item.team1_name}`}>
+                <Link href={`/league/${lid}/team/${item.team1_tid}`}>{item.team1_name}</Link>
+              </td>
               <td className="tg-0lax" key={`${item.team1_wins}`}>{item.team1_wins}</td>
               <td className="tg-0lax" key={`points-${item.team1_name}-${item.team1_points}`}>{item.team1_points}</td>
-              <td className="tg-0lax" key={`${item.team2_name}`}>{item.team2_name}</td>
+              <td className="tg-0lax" key={`${item.team2_name}`}>
+                <Link href={`/league/${lid}/team/${item.team2_tid}`}>{item.team2_name}</Link>
+              </td>
               <td className="tg-0lax" key={`${item.team2_wins}`}>{item.team2_wins}</td>
               <td className="tg-0lax" key={`points-${item.team2_name}-${item.team2_points}`}>{item.team2_points}</td>
             </tr>

@@ -5,7 +5,7 @@ export default function Home() {
   return (
     <main>
       <p>Welcome to Valorant Fantasy!</p>
-      <div>
+      <div style={{paddingTop: "10px", paddingBottom: "10px"}}>
         <h2>Information/Announcements</h2>
         <p>Currently, this website is still in beta and if you experience any problems please reach out.</p>
       </div>

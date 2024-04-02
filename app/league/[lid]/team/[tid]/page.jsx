@@ -48,8 +48,8 @@ export default async function Team({ params }) {
     return (
       <div className="flex flex-row gap-64 pl-56">
         <div>
-          <h2>{data[0].name}</h2>
-          <h3>{data[0].owner}</h3>
+          <h2>{team[0].name}</h2>
+          <h3>{team[0].owner}</h3>
           {renderedOutput}
         </div>
       </div>
@@ -63,8 +63,8 @@ export default async function Team({ params }) {
     return (
       <div class="flex flex-row gap-64 pl-56">
         <div>
-          <h2>{data[0].name}</h2>
-          <h3>{data[0].owner}</h3>
+          <h2>{team[0].name}</h2>
+          <h3>{team[0].owner}</h3>
           {renderedOutput}
         </div>
         <div>
