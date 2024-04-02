@@ -6,7 +6,7 @@ export default async function LeagueHome({ params }) {
     const lid = params.lid
 
     const supabase = createServerComponentClient({ cookies })
-    var { data, error } = await supabase.from('Leagues').select('league_format, division1_name, division2_name').eq('lid', lid)
+    var { data, error } = await supabase.from('Leagues').select('league_format, division1_name, division2_name, announcements').eq('lid', lid)
     const league_info = data
 
     if (league_info[0].league_format == "divisions") {
@@ -44,9 +44,17 @@ export default async function LeagueHome({ params }) {
         )
     }
 
+    var announcements = league_info[0].announcements.map(item =>
+      <p key={item.slice(0,10)} style={{paddingBottom: '10px'}}>{item}</p>
+      )
+
     return (
         <main>
-            <h1 style={{textAlign: "center"}}>Standings</h1>
+            <h1>Announcements</h1>
+            <div style={{backgroundColor: '#E9F878', padding: '25px'}}>
+              {announcements}
+            </div>
+            <h1 style={{textAlign: "center", paddingTop: '10px'}}>Standings</h1>
             <table className="tg">
             <thead>
               <tr>

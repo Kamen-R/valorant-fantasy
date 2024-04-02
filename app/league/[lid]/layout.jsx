@@ -41,7 +41,7 @@ export default async function LeagueLayout({ children, params }) {
             placeholder="blur"
           />
         </a>
-        <h1>Valorant Fantasy</h1>
+        <Link href={`/league/${lid}`}>League Home</Link>
         <Link href={`/league/${lid}/team/${tid[0].tid}`}>My Team</Link>
         <Link href={`/league/${lid}/matchup/${weekly_match[0]['weekly_matchup']}`}>Matchup</Link>
         <Link href={`/league/${lid}/players`}>Player</Link>

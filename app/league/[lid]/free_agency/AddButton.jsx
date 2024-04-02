@@ -17,10 +17,24 @@ export default function AddButton({ email, lid, roster }) {
     router.refresh()
 
     const addPlayer = async () => {
-        var {data} = await supabase.from('Teams').select('tid').eq('email', email)
-        const tid = data[0].tid
+        var { data } = await supabase.from('Leagues').select('current_week').eq('lid', lid.slice(-1))
+        var current_week = data[0].current_week
+
+        
         const player_add = document.getElementById("add-player-select").value
         const player_drop = document.getElementById("drop-player-select").value
+        var { data } = await supabase.from('Games').select().eq('week', current_week).or(`name.eq.${player_add},name.eq.${player_drop}`)
+
+        if (data.length !== 0) {
+            var error_msg = `${data[0].name} has already played this week. You cannot add/drop them!`
+            document.getElementById("error-msg").innerText = error_msg
+            return null
+        }
+
+        var {data} = await supabase.from('Teams').select('tid').eq('email', email)
+        const tid = data[0].tid
+        //const player_add = document.getElementById("add-player-select").value
+        //const player_drop = document.getElementById("drop-player-select").value
         var pid_add = 0
         var pid_drop = 0
         console.log(player_add, player_drop, tid)
@@ -42,11 +56,9 @@ export default function AddButton({ email, lid, roster }) {
         var { error } = await supabase.from('Rostered').update({ [lid]: -1}).eq('pid', pid_drop)
         var { error } = await supabase.from('Teams').update({ [position] : player_add}).eq('email', email)
 
-        var { data } = await supabase.from('Leagues').select('current_week').eq('lid', lid.slice(-1))
-        var current_week = data[0].current_week
-        console.log(current_week)
+        //console.log(current_week)
         var { data } = await supabase.from('Matchups').select().eq('lid', lid.slice(-1)).gte('week', current_week).or(`tid1.eq.${tid},tid2.eq.${tid}`)
-        console.log(data)
+        //console.log(data)
 
         for (const matchup of data) {
             var mid = matchup.mid
@@ -64,6 +76,9 @@ export default function AddButton({ email, lid, roster }) {
     }
 
     return (
+        <>
+        <p id="error-msg"></p>
         <button className="btn-primary" onClick={addPlayer}>Add Player from Free Agency</button>
+        </>
     )
 } 

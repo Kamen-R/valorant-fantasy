@@ -39,7 +39,7 @@ export default async function Team({ params }) {
   
   var renderedOutput = roster_count.map(item => 
     <div className="card my-5" key={item + '-card'} id={roster_spots[item]}>
-      <h3 key={item + '-h3'} class="pos">{roster_spots[item]}</h3>
+      <h3 key={item + '-h3'} className="pos">{roster_spots[item]}</h3>
       <h3 className="fpts">{player_info[team[0][item]].fpts}</h3>
       <p key={item + '-p'} id={item}>{player_info[team[0][item]].team_code + ' ' + team[0][item] + ' - ' + player_info[team[0][item]].position}</p>
     </div>
@@ -61,7 +61,7 @@ export default async function Team({ params }) {
   )
 
     return (
-      <div class="flex flex-row gap-64 pl-56">
+      <div className="flex flex-row gap-64 pl-56">
         <div>
           <h2>{team[0].name}</h2>
           <h3>{team[0].owner}</h3>
