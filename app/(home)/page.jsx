@@ -5,12 +5,12 @@ export default function Home() {
   return (
     <main>
       <p>Welcome to Valorant Fantasy!</p>
-      <h2>My Leagues</h2>
-      <DisplayLeagues />
       <div>
         <h2>Information/Announcements</h2>
         <p>Currently, this website is still in beta and if you experience any problems please reach out.</p>
       </div>
+      <h2>My Leagues</h2>
+      <DisplayLeagues />
     </main>
   )
 }

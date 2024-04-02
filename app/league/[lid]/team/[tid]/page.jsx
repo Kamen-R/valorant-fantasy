@@ -5,19 +5,6 @@ import { cookies } from "next/headers";
 import SwapButton from "./SwapButton";
 //import { FaEdit } from "react-icons/fa";
 
-async function getPlayerInfo(supabase, name) {
-   const { data, error } = await supabase.from('Players').select('position, team').eq('name', name)
-
-   return data[0].team + ' ' + name + ' - ' + data[0].position
-}
-
-async function getPlayerAvg(supabase, name) {
-  const { data, error } = await supabase.from('Players').select('fpts').eq('name', name)
-
-  return data[0].fpts + ' pts'
-}
-//{getPlayerPos(supabase, data[0].duelist)}
-
 export default async function Team({ params }) {
   const lid = params.lid
   const tid = params.tid
@@ -31,23 +18,35 @@ export default async function Team({ params }) {
   var subButton = true
 
   var { data, error } = await supabase.from('Teams').select().eq('lid', lid).eq('tid', tid)
+  const team = data
+  var roster_string = ''
+  for (const item of roster_count) {
+    roster_string += `name.eq.${team[0][item]},`
+  }
+
   if (data[0].email == email) {
     subButton = true
   }
   else {
     subButton = false
   }
-
+  
+  var { data } = await supabase.from('Players').select('name, position, team_code, fpts').or(roster_string.slice(0, -1))
+  var player_info = {}
+  for (const item of data) {
+    player_info[item.name] = {position: item.position, team_code: item.team_code, fpts: item.fpts}
+  }
+  
   var renderedOutput = roster_count.map(item => 
     <div className="card my-5" key={item + '-card'} id={roster_spots[item]}>
       <h3 key={item + '-h3'} class="pos">{roster_spots[item]}</h3>
-      <h3 class="fpts">{getPlayerAvg(supabase, data[0][item])}</h3>
-      <p key={item + '-p'} id={item}>{getPlayerInfo(supabase, data[0][item])}</p>
+      <h3 className="fpts">{player_info[team[0][item]].fpts}</h3>
+      <p key={item + '-p'} id={item}>{player_info[team[0][item]].team_code + ' ' + team[0][item] + ' - ' + player_info[team[0][item]].position}</p>
     </div>
-  ) //getPlayerInfo(supabase, data[0][item]
+  )
   if (!subButton) {
     return (
-      <div class="flex flex-row gap-64 pl-56">
+      <div className="flex flex-row gap-64 pl-56">
         <div>
           <h2>{data[0].name}</h2>
           <h3>{data[0].owner}</h3>

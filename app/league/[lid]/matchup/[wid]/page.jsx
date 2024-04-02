@@ -1,33 +1,50 @@
-//import { Suspense } from 'react';
-//import Loading from "../../../../(home)/loading";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
-import DisplayMatchup from "./DisplayMatchup";
 import Link from 'next/link';
+import DisplayAllMatchups from "./DisplayAllMatchups";
 
-async function getMatches(lid, wid) {
-    const supabase = createServerComponentClient({ cookies })
-    const { data, error } = await supabase.from('Leagues').select('schedule').eq('lid', lid)
+// async function getMatches(lid, wid) {
+//     const supabase = createServerComponentClient({ cookies })
+//     const { data, error } = await supabase.from('Leagues').select('schedule').eq('lid', lid)
   
-    if (error) {
-        console.log(error.message)
-    }
+//     if (error) {
+//         console.log(error.message)
+//     }
   
-    return data[0]["schedule"][wid]
+//     return data[0]["schedule"][wid]
+// }
+
+async function getLeagueInfo(lid){
+  const supabase = createServerComponentClient({ cookies })
+  const { data, error } = await supabase.from('Leagues').select('schedule, roster_spots, roster_count, team_ids').eq('lid', lid)
+
+  if (error) {
+    console.log(error.message)
+  }
+
+  return data[0]
 }
 
 export default async function Matchup({ params }) {
   const lid = params.lid
   const wid = params.wid
 
-  const match_list = await getMatches(lid, wid)
+  const league_info = await getLeagueInfo(lid)
+  //console.log(league_info)
+  var renderedOutput = DisplayAllMatchups(league_info, lid, wid)
 
-  var renderedOutput = match_list.map(item => DisplayMatchup(item, wid, lid))
+  var num_weeks = Object.keys(league_info.schedule)
+  const curr_index = num_weeks.indexOf(wid)
+  num_weeks.splice(curr_index, 1)
+
+  var matchOutput = num_weeks.map(item=> 
+    <Link key={`week-${item}`} className="week" href={`/league/${lid}/matchup/${item}`}>Week {item} </Link>
+    )
 
     return (
       <>
-        <div>
-          <Link href={`/league/${lid}/matchup/2`}>Week 2</Link>
+        <div style={{textAlign: "center", paddingBottom: "20px"}}>
+          {matchOutput}
         </div>
         {renderedOutput}
       </>

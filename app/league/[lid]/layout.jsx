@@ -27,6 +27,8 @@ export default async function LeagueLayout({ children, params }) {
     redirect('/login')
   }
 
+  var { data:weekly_match } = await supabase.from('Leagues').select('weekly_matchup').eq('lid', params.lid)
+
   return (
     <>
       <nav>
@@ -41,8 +43,10 @@ export default async function LeagueLayout({ children, params }) {
         </a>
         <h1>Valorant Fantasy</h1>
         <Link href={`/league/${lid}/team/${tid[0].tid}`}>My Team</Link>
-        <Link href={`/league/${lid}/matchup/1`}>Matchup</Link>
-        <Link href={`/league/${lid}/players`} className="mr-auto">Players</Link>
+        <Link href={`/league/${lid}/matchup/${weekly_match[0]['weekly_matchup']}`}>Matchup</Link>
+        <Link href={`/league/${lid}/players`}>Player</Link>
+        <Link href={`/league/${lid}/free_agency`}>Free Agents</Link>
+        <Link href={`/league/${lid}/transactions`} className="mr-auto">Transactions</Link>
         {data.session.user && <span>{data.session.user.email}</span>}
         <LogoutButton />
       </nav>
