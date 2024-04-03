@@ -3,17 +3,6 @@ import { cookies } from "next/headers";
 import Link from 'next/link';
 import DisplayAllMatchups from "./DisplayAllMatchups";
 
-// async function getMatches(lid, wid) {
-//     const supabase = createServerComponentClient({ cookies })
-//     const { data, error } = await supabase.from('Leagues').select('schedule').eq('lid', lid)
-  
-//     if (error) {
-//         console.log(error.message)
-//     }
-  
-//     return data[0]["schedule"][wid]
-// }
-
 async function getLeagueInfo(lid){
   const supabase = createServerComponentClient({ cookies })
   const { data, error } = await supabase.from('Leagues').select('schedule, roster_spots, roster_count, team_ids').eq('lid', lid)

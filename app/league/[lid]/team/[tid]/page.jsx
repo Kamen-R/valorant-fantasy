@@ -30,6 +30,7 @@ export default async function Team({ params }) {
   else {
     subButton = false
   }
+  //console.log(subButton)
   
   var { data } = await supabase.from('Players').select('name, position, team_code, fpts').or(roster_string.slice(0, -1))
   var player_info = {}

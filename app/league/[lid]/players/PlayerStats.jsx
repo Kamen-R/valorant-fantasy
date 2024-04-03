@@ -22,13 +22,13 @@ const columns = [
   {field: 'gp', headerName: 'Games Played', width: 150 }
 ];
 
-export default function Players(){
+export default function Players(region_string){
   const supabase = createClientComponentClient()
   const [rows, SetRows] = useState([])
 
   useEffect(() => {
     const fetcher = async () => {
-      const { data } = await supabase.from('Players').select().order('fpts', { ascending: false })
+      const { data } = await supabase.from('Players').select().or(region_string.region_string).order('fpts', { ascending: false })
       SetRows(data)
     }
     fetcher();
