@@ -9,12 +9,12 @@ export default async function FreeAgencyPage({ params }) {
   const email = user.email
   const lid = 'lid' + params.lid
 
-  var { data:roster_count } = await supabase.from('Leagues').select('roster_count').eq('lid', params.lid)
+  var { data:roster_count } = await supabase.from('Leagues').select('roster_count, region_string').eq('lid', params.lid)
   var { data } = await supabase.from('Teams').select().eq('lid', params.lid).eq('email', email)
   const roster = data
 
   //var { data, error } = await supabase.from('Rostered').select(`pid, ${lid}, Players (*)`).eq(`${lid}`, -1).order('Players (name)', { ascending: true })
-  var { data, error } = await supabase.from('Players').select(`pid, name, position, team, region, fpts, gp, Rostered!inner(pid, ${lid})`).eq(`Rostered.${lid}`, -1).order('fpts', { ascending: false })
+  var { data, error } = await supabase.from('Players').select(`pid, name, position, team, region, fpts, gp, Rostered!inner(pid, ${lid})`).eq(`Rostered.${lid}`, -1).or(roster_count[0].region_string).order('name', { ascending: true })
   //console.log(data)
   var renderedOutput = roster_count[0]["roster_count"].map(item =>
     <option key={roster[0][item]} value={roster[0][item]}>{roster[0][item]}</option>

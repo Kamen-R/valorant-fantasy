@@ -6,8 +6,12 @@ export default async function LeagueHome({ params }) {
     const lid = params.lid
 
     const supabase = createServerComponentClient({ cookies })
-    var { data, error } = await supabase.from('Leagues').select('league_format, division1_name, division2_name, announcements').eq('lid', lid)
+    var { data, error } = await supabase.from('Leagues').select('league_format, division1_name, division2_name, announcements, name').eq('lid', lid)
     const league_info = data
+
+    var announcements = league_info[0].announcements.map(item =>
+      <p key={item.slice(0,10)} style={{paddingBottom: '10px'}}>{item}</p>
+      )
 
     if (league_info[0].league_format == "divisions") {
         var { data, error } = await supabase.from('Standings').select().eq('lid', lid).eq('division', 1)
@@ -42,11 +46,55 @@ export default async function LeagueHome({ params }) {
               <td className="tg-0lax" key={`points-${item.team2_name}-${item.team2_points}`}>{item.team2_points}</td>
             </tr>
         )
-    }
+    } else {
+      var { data, error } = await supabase.from('Standings').select().eq('lid', lid)
+      var standings = data.sort((a, b) => b.wins - a.wins || b.total_points - a.total_points)
+        
+      var table_data = []
+        for (let i = 0; i < standings.length; i++) {
+            // need if statement for ties
+            var team_record = standings[i].wins + "-" + standings[i].losses
 
-    var announcements = league_info[0].announcements.map(item =>
-      <p key={item.slice(0,10)} style={{paddingBottom: '10px'}}>{item}</p>
-      )
+            table_data.push({team_name: standings[i].team_name, team_wins: team_record, team_points: standings[i].total_points,
+              team_tid: standings[i].tid})
+        }
+        //console.log(table_data)
+
+        var renderedTable = table_data.map(item => 
+            <tr key={`${item.team_name}`}>
+              <td className="tg-0lax" key={`${item.team_name}`}>
+                <Link href={`/league/${lid}/team/${item.team_tid}`}>{item.team_name}</Link>
+              </td>
+              <td className="tg-0lax" key={`${item.team_wins}`}>{item.team_wins}</td>
+              <td className="tg-0lax" key={`points-${item.team_name}-${item.team_points}`}>{item.team_points}</td>
+            </tr>
+        )
+
+      return (
+        <main>
+            <h1>Announcements</h1>
+            <div style={{backgroundColor: '#E9F878', padding: '25px'}}>
+              {announcements}
+            </div>
+            <h1 style={{textAlign: "center", paddingTop: '10px'}}>Standings</h1>
+            <table className="tg">
+            <thead>
+              <tr>
+                <th className="tg-baqh" colSpan={"3"}>{league_info[0].name}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="tg-0lax" key={'team1_name'}>Team</td>
+                <td className="tg-0lax" key={'team1_wins'}>W-L</td>
+                <td className="tg-0lax" key={'team1_points'}>Total Points</td>
+              </tr>
+              {renderedTable}
+            </tbody>
+            </table>
+        </main>
+    )
+    }
 
     return (
         <main>
