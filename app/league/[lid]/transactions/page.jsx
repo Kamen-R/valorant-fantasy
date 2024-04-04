@@ -4,7 +4,7 @@ import { cookies } from "next/headers"
 function getDate(time_string) {
     var date = new Date(time_string)
 
-    return date.toLocaleString()
+    return date.toLocaleString('en-US', { timeZone: 'PST'})
 }
 
 export default async function Transactions({ params }) {

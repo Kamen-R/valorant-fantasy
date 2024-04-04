@@ -53,7 +53,7 @@ function renderMatch(league_info, matchup, team_names, points, players){
       )
       
   return (
-      <div id="flex-container" style={{paddingBottom: "10px"}}>
+      <div id="flex-container" style={{paddingBottom: "20px", marginBottom: "20px"}}>
         <div id="team-left">
           <h2 id="team-name-left">{team_names[matchup.tid1].name}</h2>
           <h3 id="team-name-left">{team_names[matchup.tid1].owner}</h3>
@@ -71,6 +71,7 @@ function renderMatch(league_info, matchup, team_names, points, players){
           <h3 id="team-name-right">{team_names[matchup.tid2].owner}</h3>
           {renderedOutputTeam2}
         </div>
+        <br />
       </div>
   );
 }
@@ -83,7 +84,7 @@ export default async function DisplayAllMatchups(league_info, lid, wid) {
     }
 
     const supabase = createServerComponentClient({ cookies })
-    const { data:matchup_data } = await supabase.from('Matchups').select().or(match_string.slice(0, -1))
+    const { data:matchup_data } = await supabase.from('Matchups').select().or(match_string.slice(0, -1)).order('mid', { ascending: true })
     //console.log(matchup_data)
 
     var team_string = ""
