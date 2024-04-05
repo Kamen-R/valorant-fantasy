@@ -32,10 +32,10 @@ export default async function Team({ params }) {
   }
   //console.log(subButton)
   
-  var { data } = await supabase.from('Players').select('name, position, team_code, fpts').or(roster_string.slice(0, -1))
+  var { data } = await supabase.from('Players').select('name, position, team_code, avg_fpts').or(roster_string.slice(0, -1))
   var player_info = {}
   for (const item of data) {
-    player_info[item.name] = {position: item.position, team_code: item.team_code, fpts: item.fpts}
+    player_info[item.name] = {position: item.position, team_code: item.team_code, fpts: item.avg_fpts}
   }
   
   var renderedOutput = roster_count.map(item => 
