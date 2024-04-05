@@ -17,7 +17,11 @@ async function getGameData(supabase, wid) {
 
     var point_dict = {}
     for (const game of data) {
+      if (game.name in point_dict) {
+        point_dict[game.name] = Math.round(((point_dict[game.name] / 2) + (game.fpts / 2)) * 10) / 10
+      } else {
         point_dict[game.name] = game.fpts
+      }
     }
 
     var { data } = await supabase.from('Players').select('name, team_code')
