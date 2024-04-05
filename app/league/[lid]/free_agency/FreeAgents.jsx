@@ -18,7 +18,7 @@ const columns = [
   {field: 'position', headerName: 'Position', width: 150 },
   {field: 'team', headerName: 'Team', width: 150 },
   {field: 'region', headerName: 'Region', width: 150},
-  {field: 'fpts', headerName: 'Avg Fpts', width: 150 },
+  {field: 'avg_fpts', headerName: 'Avg Fpts', width: 150 },
   {field: 'gp', headerName: 'Games Played', width: 150 }
 ];
 

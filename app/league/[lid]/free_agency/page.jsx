@@ -14,7 +14,7 @@ export default async function FreeAgencyPage({ params }) {
   const roster = data
 
   //var { data, error } = await supabase.from('Rostered').select(`pid, ${lid}, Players (*)`).eq(`${lid}`, -1).order('Players (name)', { ascending: true })
-  var { data, error } = await supabase.from('Players').select(`pid, name, position, team, region, fpts, gp, Rostered!inner(pid, ${lid})`).eq(`Rostered.${lid}`, -1).or(roster_count[0].region_string).order('name', { ascending: true })
+  var { data, error } = await supabase.from('Players').select(`pid, name, position, team, region, avg_fpts, gp, Rostered!inner(pid, ${lid})`).eq(`Rostered.${lid}`, -1).or(roster_count[0].region_string).order('name', { ascending: true })
   //console.log(data)
   var renderedOutput = roster_count[0]["roster_count"].map(item =>
     <option key={roster[0][item]} value={roster[0][item]}>{roster[0][item]}</option>
