@@ -14,11 +14,23 @@ async function getTeamNames(supabase, team_string) {
 
 async function getGameData(supabase, wid) {
     var { data } = await supabase.from('Games').select().eq('week', wid)
+    var { data: schedule } = await supabase.from('Schedule').select().eq('week', wid).eq('multi_game_week', 1)
+
+    var two_games = {}
+    for (const match of schedule) {
+      two_games[match.team] = 1
+    }
 
     var point_dict = {}
+    var players_two_game = {}
     for (const game of data) {
-      if (game.name in point_dict) {
-        point_dict[game.name] = Math.round(((point_dict[game.name] / 2) + (game.fpts / 2)) * 10) / 10
+      if (game.team in two_games) {
+        if (game.name in point_dict) {
+          point_dict[game.name] = Math.round(((players_two_game[game.name]) + (game.fpts / 2)) * 10) / 10
+        } else {
+          point_dict[game.name] = Math.round(game.fpts / 2 * 10) / 10
+          players_two_game[game.name] = game.fpts / 2
+        }
       } else {
         point_dict[game.name] = game.fpts
       }
