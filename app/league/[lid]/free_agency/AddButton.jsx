@@ -17,8 +17,8 @@ export default function AddButton({ email, lid, roster }) {
     router.refresh()
 
     const addPlayer = async () => {
-        var { data } = await supabase.from('Leagues').select('current_week').eq('lid', lid.slice(-1))
-        var current_week = data[0].current_week
+        var { data } = await supabase.from('Leagues').select('weekly_matchup').eq('lid', lid.slice(-1))
+        var current_week = data[0].weekly_matchup
 
         
         const player_add = document.getElementById("add-player-select").value
