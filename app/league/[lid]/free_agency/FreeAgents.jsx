@@ -34,7 +34,7 @@ export default function FreeAgents(data) {
                ...data.initialState,
                pagination: { paginationModel: { pageSize: 25} },
              }}
-             pageSizeOptions={[25, 50]}
+             pageSizeOptions={[25, 50, 100]}
           />
     </div>
   )
