@@ -9,7 +9,7 @@ function getDate(time_string) {
 
 export default async function Transactions({ params }) {
     const supabase = createServerComponentClient({ cookies })
-    var { data, error } = await supabase.from('Transactions').select('id, tid, player_add, player_drop, created_at').eq('lid', params.lid)
+    var { data, error } = await supabase.from('Transactions').select('id, tid, player_add, player_drop, created_at, type').eq('lid', params.lid)
     const transactions = data
 
     var { data } = await supabase.from('Teams').select('tid, name').eq('lid', params.lid)
@@ -21,6 +21,7 @@ export default async function Transactions({ params }) {
     var renderedTable = transactions.map(item =>
         <tr key={item.id}>
           <td className="tg-0lax" >{team_names[item.tid]}</td>
+          <td className="tg-0lax" >{item.type}</td>
           <td className="tg-0lax" >{item.player_add}</td>
           <td className="tg-0lax" >{item.player_drop}</td>
           <td className="tg-0lax" >{getDate(item.created_at)}</td>
@@ -34,6 +35,7 @@ export default async function Transactions({ params }) {
         <thead>
           <tr>
             <th className="tg-0lax">Team</th>
+            <th className="tg-0lax">Type</th>
             <th className="tg-0lax">Player Added</th>
             <th className="tg-0lax">Player Dropped</th>
             <th className="tg-0lax">Time</th>

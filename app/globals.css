@@ -131,9 +131,9 @@ form button {
 }
 .fpts {
     position: absolute;
-    left: 250px;
+    left: 275px;
     font-size: 24px;
-    top: 25px;
+    top: 40px;
 }
 .card p {
     @apply my-4 text-sm leading-6;

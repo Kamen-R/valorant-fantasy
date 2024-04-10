@@ -3,7 +3,24 @@
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 import { useRouter } from "next/navigation"
 
-export default function SwapButton({ lid, tid }) {
+function checkGameTime(matches, player_info, player) {
+  if (matches[player_info[player].team].time == "None") {
+    return true // return true because if they don't have a game this week you can sub
+  }
+
+  var currentdatetime = new Date(); 
+  var gametime = new Date(matches[player_info[player].team].time)
+  console.log(gametime, currentdatetime)
+
+  if (gametime < currentdatetime) {
+    return false // return false if game start time is before current time, so you cannot sub
+  }
+  if (gametime > currentdatetime) {
+    return true // return true is game start time is after current time, so you can still sub
+  }
+}
+
+export default function SwapButton({ lid, tid, matches, player_info }) {
   const supabase = createClientComponentClient()
   const router = useRouter()
 
@@ -19,6 +36,15 @@ export default function SwapButton({ lid, tid }) {
     const pos2 = document.getElementById(player2).getElementsByTagName('p')[0]
     console.log(pos1.innerHTML.split(' ')[1], pos2.innerHTML.split(' ')[1])
     
+    if (!checkGameTime(matches, player_info, pos1.innerHTML.split(' ')[1])) {
+      document.getElementById('error-p').innerHTML = pos1.innerHTML.split(' ')[1] + '\'s game has already started! You cannot sub them out.'
+      return null
+    }
+    if (!checkGameTime(matches, player_info, pos2.innerHTML.split(' ')[1])) {
+      document.getElementById('error-p').innerHTML = pos2.innerHTML.split(' ')[1] + '\'s game has already started! You cannot sub them out.'
+      return null
+    }
+
     var { error } = await supabase.from('Teams').update({[pos1.id]: pos2.innerHTML.split(' ')[1], [pos2.id]: pos1.innerHTML.split(' ')[1]}).eq('lid', lid).eq('tid', tid)
     var swap_error = error
     console.log({ [pos1.id]: pos2.innerHTML, [pos2.id]: pos1.innerHTML})
@@ -48,6 +74,9 @@ export default function SwapButton({ lid, tid }) {
   }
 
   return (
+    <>
     <button className="btn-primary" onClick={updatePos} style={{marginTop: 10 + "px"}}>Swap</button>
+    <p id="error-p">Use button to swap players</p>
+    </>
   )
 }

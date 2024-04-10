@@ -5,14 +5,28 @@ import { cookies } from "next/headers";
 import SwapButton from "./SwapButton";
 //import { FaEdit } from "react-icons/fa";
 
+function createMatchDictionary(matches) {
+  var output = {}
+  for (const game of matches) {
+    if (game.team in output) {
+      output[game.team].opponent += ", " + game.opponent
+    } else {
+      output[game.team] = {opponent: game.opponent, time: game.time}
+    }
+  }
+
+  return output
+}
+
 export default async function Team({ params }) {
   const lid = params.lid
   const tid = params.tid
 
   const supabase = createServerComponentClient({ cookies })
-  var { data, error} = await supabase.from('Leagues').select(`roster_spots, roster_count`).eq('lid', lid)
+  var { data, error} = await supabase.from('Leagues').select(`roster_spots, roster_count, weekly_matchup`).eq('lid', lid)
   const roster_spots = data[0].roster_spots
-  const roster_count = data[0].roster_count  
+  const roster_count = data[0].roster_count
+  const week = data[0].weekly_matchup
   var { data: { user } } = await supabase.auth.getUser()
   const email = user.email
   var subButton = true
@@ -32,10 +46,22 @@ export default async function Team({ params }) {
   }
   //console.log(subButton)
   
-  var { data } = await supabase.from('Players').select('name, position, team_code, avg_fpts').or(roster_string.slice(0, -1))
+  var { data: matches } = await supabase.from('Schedule').select('team, opponent, time').eq('week', week)
+  var matches = createMatchDictionary(matches)
+
+  var { data } = await supabase.from('Players').select('name, position, team_code, avg_fpts, team').or(roster_string.slice(0, -1))
   var player_info = {}
+  var game_time = {}
   for (const item of data) {
-    player_info[item.name] = {position: item.position, team_code: item.team_code, fpts: item.avg_fpts}
+    //console.log(item.team)
+    //console.log(matches[item.team].opponent)
+    if (item.team in matches) {
+      player_info[item.name] = {position: item.position, team_code: item.team_code, fpts: item.avg_fpts, opponent: 'VS ' + matches[item.team].opponent, team: item.team}
+      game_time[item.name] = matches[item.team]
+    } else {
+      player_info[item.name] = {position: item.position, team_code: item.team_code, fpts: item.avg_fpts, opponent: "BYE WEEK", team: item.team}
+      game_time[item.name] = "None"
+    }
   }
   
   var renderedOutput = roster_count.map(item => 
@@ -43,6 +69,7 @@ export default async function Team({ params }) {
       <h3 key={item + '-h3'} className="pos">{roster_spots[item]}</h3>
       <h3 className="fpts">{player_info[team[0][item]].fpts}</h3>
       <p key={item + '-p'} id={item}>{player_info[team[0][item]].team_code + ' ' + team[0][item] + ' - ' + player_info[team[0][item]].position}</p>
+      <p key={item + '-p-opp'} id={item + '-opp'}>{player_info[team[0][item]].opponent}</p>
     </div>
   )
   if (!subButton) {
@@ -79,7 +106,7 @@ export default async function Team({ params }) {
             <option value="" key="blank2">--Choose a player you want to swap--</option>
             {optionOutput}
           </select>
-          <SwapButton lid={lid} tid={tid}/>
+          <SwapButton lid={lid} tid={tid} matches={matches} player_info={player_info}/>
         </div>
       </div>
     );
