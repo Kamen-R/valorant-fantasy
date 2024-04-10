@@ -54,7 +54,7 @@ export default function AddButton({ email, lid, roster }) {
 
         var { error } = await supabase.from('Rostered').update({ [lid]: tid}).eq('pid', pid_add)
         var { error } = await supabase.from('Rostered').update({ [lid]: -1}).eq('pid', pid_drop)
-        var { error } = await supabase.from('Teams').update({ [position] : player_add}).eq('email', email)
+        var { error } = await supabase.from('Teams').update({ [position] : player_add}).eq('tid', tid)
 
         //console.log(current_week)
         var { data } = await supabase.from('Matchups').select().eq('lid', lid.slice(-1)).gte('week', current_week).or(`tid1.eq.${tid},tid2.eq.${tid}`)
