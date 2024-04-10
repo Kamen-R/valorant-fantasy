@@ -4,10 +4,6 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 import { useRouter } from "next/navigation"
 
 function checkGameTime(matches, player_info, player) {
-  if (matches[player_info[player].team].time == "None") {
-    return true // return true because if they don't have a game this week you can sub
-  }
-
   var currentdatetime = new Date(); 
   var gametime = new Date(matches[player_info[player].team].time)
   console.log(gametime, currentdatetime)
@@ -20,7 +16,7 @@ function checkGameTime(matches, player_info, player) {
   }
 }
 
-export default function SwapButton({ lid, tid, matches, player_info }) {
+export default function SwapButton({ lid, tid, matches, player_info, game_time}) {
   const supabase = createClientComponentClient()
   const router = useRouter()
 
@@ -36,13 +32,18 @@ export default function SwapButton({ lid, tid, matches, player_info }) {
     const pos2 = document.getElementById(player2).getElementsByTagName('p')[0]
     console.log(pos1.innerHTML.split(' ')[1], pos2.innerHTML.split(' ')[1])
     
-    if (!checkGameTime(matches, player_info, pos1.innerHTML.split(' ')[1])) {
-      document.getElementById('error-p').innerHTML = pos1.innerHTML.split(' ')[1] + '\'s game has already started! You cannot sub them out.'
-      return null
+    if (game_time[pos1.innerHTML.split(' ')[1]] != "None") {
+      if (!checkGameTime(matches, player_info, pos1.innerHTML.split(' ')[1])) {
+        document.getElementById('error-p').innerHTML = pos1.innerHTML.split(' ')[1] + '\'s game has already started! You cannot sub them out.'
+        return null
+      }
     }
-    if (!checkGameTime(matches, player_info, pos2.innerHTML.split(' ')[1])) {
-      document.getElementById('error-p').innerHTML = pos2.innerHTML.split(' ')[1] + '\'s game has already started! You cannot sub them out.'
-      return null
+    
+    if (game_time[pos2.innerHTML.split(' ')[1]] != "None") {
+      if (!checkGameTime(matches, player_info, pos2.innerHTML.split(' ')[1])) {
+        document.getElementById('error-p').innerHTML = pos2.innerHTML.split(' ')[1] + '\'s game has already started! You cannot sub them out.'
+        return null
+      }
     }
 
     var { error } = await supabase.from('Teams').update({[pos1.id]: pos2.innerHTML.split(' ')[1], [pos2.id]: pos1.innerHTML.split(' ')[1]}).eq('lid', lid).eq('tid', tid)

@@ -106,7 +106,7 @@ export default async function Team({ params }) {
             <option value="" key="blank2">--Choose a player you want to swap--</option>
             {optionOutput}
           </select>
-          <SwapButton lid={lid} tid={tid} matches={matches} player_info={player_info}/>
+          <SwapButton lid={lid} tid={tid} matches={matches} player_info={player_info} game_time={game_time}/>
         </div>
       </div>
     );
