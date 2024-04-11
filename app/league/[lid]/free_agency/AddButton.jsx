@@ -70,7 +70,7 @@ export default function AddButton({ email, lid, roster }) {
             var { error } = await supabase.from('Matchups').update({[team_num+position]: player_add}).eq('mid', mid)
         }
 
-        var { error } = await supabase.from('Transactions').insert({type: 'add', add: pid_add, drop: pid_drop, lid: lid.slice(-1), tid: tid, player_add: player_add, player_drop: player_drop})
+        var { error } = await supabase.from('Transactions').insert({type: 'Add', add: pid_add, drop: pid_drop, lid: lid.slice(-1), tid: tid, player_add: player_add, player_drop: player_drop})
 
         router.push(`/league/${lid.slice(-1)}/team/${tid}`)
     }

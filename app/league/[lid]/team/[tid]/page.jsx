@@ -28,7 +28,8 @@ export default async function Team({ params }) {
   const roster_count = data[0].roster_count
   const week = data[0].weekly_matchup
   var { data: { user } } = await supabase.auth.getUser()
-  const email = user.email
+  //console.log(user)
+  const user_id = user.id
   var subButton = true
 
   var { data, error } = await supabase.from('Teams').select().eq('lid', lid).eq('tid', tid)
@@ -38,7 +39,7 @@ export default async function Team({ params }) {
     roster_string += `name.eq.${team[0][item]},`
   }
 
-  if (data[0].email == email) {
+  if (data[0]["User UID"] == user_id) {
     subButton = true
   }
   else {
@@ -63,12 +64,13 @@ export default async function Team({ params }) {
       game_time[item.name] = "None"
     }
   }
+  //console.log(player_info, game_time)
   
   var renderedOutput = roster_count.map(item => 
     <div className="card my-5" key={item + '-card'} id={roster_spots[item]}>
       <h3 key={item + '-h3'} className="pos">{roster_spots[item]}</h3>
       <h3 className="fpts">{player_info[team[0][item]].fpts}</h3>
-      <p key={item + '-p'} id={item}>{player_info[team[0][item]].team_code + ' ' + team[0][item] + ' - ' + player_info[team[0][item]].position}</p>
+      <p key={item + '-p'} id={team[0][item]}>{player_info[team[0][item]].team_code + ' ' + team[0][item] + ' - ' + player_info[team[0][item]].position}</p>
       <p key={item + '-p-opp'} id={item + '-opp'}>{player_info[team[0][item]].opponent}</p>
     </div>
   )

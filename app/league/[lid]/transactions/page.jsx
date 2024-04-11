@@ -9,7 +9,7 @@ function getDate(time_string) {
 
 export default async function Transactions({ params }) {
     const supabase = createServerComponentClient({ cookies })
-    var { data, error } = await supabase.from('Transactions').select('id, tid, player_add, player_drop, created_at, type').eq('lid', params.lid)
+    var { data, error } = await supabase.from('Transactions').select('id, tid, player_add, player_drop, created_at, type').eq('lid', params.lid).order('created_at', {ascending: false})
     const transactions = data
 
     var { data } = await supabase.from('Teams').select('tid, name').eq('lid', params.lid)
