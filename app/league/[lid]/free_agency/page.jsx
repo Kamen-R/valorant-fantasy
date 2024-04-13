@@ -6,11 +6,11 @@ import FreeAgents from "./FreeAgents";
 export default async function FreeAgencyPage({ params }) {
   const supabase = createServerComponentClient({ cookies })
   var { data: { user } } = await supabase.auth.getUser()  //might want to change other getSessions -> getUser it's more secure on the server side
-  const email = user.email
+  const user_id = user.id
   const lid = 'lid' + params.lid
 
   var { data:roster_count } = await supabase.from('Leagues').select('roster_count, region_string').eq('lid', params.lid)
-  var { data } = await supabase.from('Teams').select().eq('lid', params.lid).eq('email', email)
+  var { data } = await supabase.from('Teams').select().eq('lid', params.lid).eq('User UID', user_id)
   const roster = data
 
   //var { data, error } = await supabase.from('Rostered').select(`pid, ${lid}, Players (*)`).eq(`${lid}`, -1).order('Players (name)', { ascending: true })
@@ -35,7 +35,7 @@ export default async function FreeAgencyPage({ params }) {
       </select>
     </div>
     <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', paddingBottom: '10px'}}>
-      <AddButton email={email} lid={lid} roster={roster}/>
+      <AddButton user_id={user_id} lid={lid} roster={roster}/>
     </div>
     <FreeAgents data={data}/>
     </>

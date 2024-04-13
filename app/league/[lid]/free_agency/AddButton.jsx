@@ -11,7 +11,7 @@ function getPositionByName(roster, name) {
     }
 }
 
-export default function AddButton({ email, lid, roster }) {
+export default function AddButton({ user_id, lid, roster }) {
     const supabase = createClientComponentClient()
     const router = useRouter()
     router.refresh()
@@ -31,8 +31,9 @@ export default function AddButton({ email, lid, roster }) {
             return null
         }
 
-        var {data} = await supabase.from('Teams').select('tid').eq('email', email)
+        var {data} = await supabase.from('Teams').select('tid').eq('User UID', user_id).eq('lid', lid.slice(-1))
         const tid = data[0].tid
+        console.log(tid)
         //const player_add = document.getElementById("add-player-select").value
         //const player_drop = document.getElementById("drop-player-select").value
         var pid_add = 0
