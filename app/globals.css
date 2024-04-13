@@ -129,9 +129,10 @@ form button {
     @apply
       text-sm
 }
+/* 275px before change*/
 .fpts {
     position: absolute;
-    left: 275px;
+    left: 310px;
     font-size: 24px;
     top: 40px;
 }

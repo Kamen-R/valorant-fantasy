@@ -50,17 +50,23 @@ export default async function Team({ params }) {
   var { data: matches } = await supabase.from('Schedule').select('team, opponent, time').eq('week', week)
   var matches = createMatchDictionary(matches)
 
-  var { data } = await supabase.from('Players').select('name, position, team_code, avg_fpts, team').or(roster_string.slice(0, -1))
+  var { data } = await supabase.from('Players').select('name, position, team_code, avg_fpts, team, test_role').or(roster_string.slice(0, -1))
   var player_info = {}
   var game_time = {}
   for (const item of data) {
     //console.log(item.team)
     //console.log(matches[item.team].opponent)
+    if (lid == 4) {
+      var pos = item.test_role
+    } else {
+      var pos = item.position
+    }
+
     if (item.team in matches) {
-      player_info[item.name] = {position: item.position, team_code: item.team_code, fpts: item.avg_fpts, opponent: 'VS ' + matches[item.team].opponent, team: item.team}
+      player_info[item.name] = {position: pos, team_code: item.team_code, fpts: item.avg_fpts, opponent: 'VS ' + matches[item.team].opponent, team: item.team}
       game_time[item.name] = matches[item.team]
     } else {
-      player_info[item.name] = {position: item.position, team_code: item.team_code, fpts: item.avg_fpts, opponent: "BYE WEEK", team: item.team}
+      player_info[item.name] = {position: pos, team_code: item.team_code, fpts: item.avg_fpts, opponent: "BYE WEEK", team: item.team}
       game_time[item.name] = "None"
     }
   }
