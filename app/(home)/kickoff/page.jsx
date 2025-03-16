@@ -42,15 +42,17 @@ import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 // }
 const columns = [
   {field: 'name', headerName: 'Name', width: 150},
-  {field: 'team', headerName: 'Team', width: 150},
-  {field: 'position', headerName: 'Pos', width: 150},
-  {field: 'region', headerName: 'Region', width: 150},
+  {field: 'team', headerName: 'Team', width: 175},
+  {field: 'position', headerName: 'Pos', width: 100},
+  {field: 'region', headerName: 'Region', width: 100},
+  {field: 'projected_avg_fpts', headerName: 'Projected Avg', width: 150},
+  {field: 'kickoff_2025_avg_fpts', headerName: 'Kickoff Fantasy Avg', width: 150},
+  {field: 'gp', headerName: 'Games Played', width: 150},
+  {field: 'season_2024_avg_fpts', headerName: 'VCT\'24 Fantasy Avg', width: 150},
+  {field: 'ACS', headerName: 'ACS', width: 100},
   {field: 'kills', headerName: 'Kills', width: 100},
   {field: 'deaths', headerName: 'Deaths', width: 100},
-  {field: 'assists', headerName: 'Assists', width: 100},
-  {field: 'ACS', headerName: 'ACS', width: 100},
-  {field: 'fpts', headerName: 'Fantasy Points', width: 150},
-  {field: 'gp', headerName: 'Games Played', width: 150}
+  {field: 'assists', headerName: 'Assists', width: 100}
 ];
 
 export default function Kickoff(){

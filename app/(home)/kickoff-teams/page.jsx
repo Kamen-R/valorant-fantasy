@@ -9,14 +9,14 @@ import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 
 const columns = [
   {field: 'name', headerName: 'Name', width: 150},
-  {field: 'region', headerName: 'Region', width: 150},
-  {field: 'map wins', headerName: 'Map Wins', width: 150},
-  {field: 'round wins', headerName: 'Round Wins', width: 150},
-  {field: 'pistols won', headerName: 'Pistols', width: 150},
-  {field: 'ecos won', headerName: 'Ecos', width: 150},
-  {field: 'semi-ecos won', headerName: 'Semi-Ecos', width: 150},
-  {field: 'fpts', headerName: 'Fantasy Points', width: 150},
-  {field: 'gp', headerName: 'Games Played', width: 150}
+  {field: 'region', headerName: 'Region', width: 100},
+  {field: 'map_wins', headerName: 'Map Wins', width: 125},
+  {field: 'rounds_won', headerName: 'Round Wins', width: 125},
+  {field: 'pistols', headerName: 'Pistols', width: 125},
+  {field: 'ecos', headerName: 'Ecos', width: 125},
+  {field: 'semi_ecos', headerName: 'Semi-Ecos', width: 125},
+  {field: 'kickoff_2025_avg_fpts', headerName: 'Kickoff Fantasy Points', width: 150},
+  {field: 'gp', headerName: 'Games Played', width: 100}
 ];
 
 export default function Kickoff(){
